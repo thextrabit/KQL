@@ -1,0 +1,61 @@
+﻿//**********************************************************
+// How to use:
+// Remove the "//" at the start of a line to make it active
+//**********************************************************
+//
+AzureDiagnostics
+//******************************************
+// SOURCE IP ADDRESS FILTERING
+//******************************************
+//
+// Single IP source
+//| where AdditionalFields.SourceIp == "10.10.10.12"
+// Multiple IP source
+//| where AdditionalFields.SourceIp in ("10.10.10.12", "10.10.10.13")
+// CIDR range source
+//| where ipv4_is_in_range(tostring(AdditionalFields.SourceIp), "10.10.10.0/24") == true
+//
+//******************************************
+// DESTINATION IP ADDRESS FILTERING
+//******************************************
+//
+// Single IP destination
+//| where AdditionalFields.DestinationIp == "10.220.10.13"
+// Multiple IP destination
+//| where AdditionalFields.DestinationIp in ("10.220.10.13", "10.220.10.14")
+// CIDR range destination
+//| where ipv4_is_in_range(tostring(AdditionalFields.DestinationIp), "10.10.10.0/24") == true
+//
+//******************************************
+// ALLOW OR DENY FILTERING
+//******************************************
+//
+// Filter on Deny only
+//| where AdditionalFields.Action == "Deny"
+// Filter on Allow only
+//| where AdditionalFields.Action == "Allow"
+//
+//******************************************
+// RULE CATEGORY FILTER
+//******************************************
+//
+// Filter on rule category e.g. AZFWApplicationRule, AZFWNetworkRule
+//| where Category == "AZFWNetworkRule"
+//
+//******************************************
+// COLUMN REDUCTION TO INTERESTING FIELDS
+//******************************************
+//
+// Only include a Subset of fields that have been renamed for easier consumption
+| project 
+     TimeGenerated
+	 , Action=AdditionalFields.Action
+	 , ActionReason=AdditionalFields.ActionReason
+	 , Protocol=AdditionalFields.Protocol
+	 , SourceIp=AdditionalFields.SourceIp
+	 , SourcePort=AdditionalFields.SourcePort
+	 , DestinationIp=AdditionalFields.DestinationIp
+	 , DestinationPort=AdditionalFields.DestinationPort
+	 , DestinationFqdn=AdditionalFields.Fqdn
+	 , Rule=AdditionalFields.Rule
+	 , RuleCategory=Category
